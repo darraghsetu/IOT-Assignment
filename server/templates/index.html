@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- 
+Generative AI Disclosure: 
+These html templates were generated using AI.
+The conversation can be viewed at:
+https://gemini.google.com/share/d386ccbd61f3
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mirror Checker | Dashboard</title>
+    <!-- Fomantic UI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .dashboard-container { max-width: 600px; margin: auto; }
+        .journey-item { transition: background 0.2s ease; }
+        .journey-item:hover { background: #f1f1f1 !important; }
+    </style>
+</head>
+<body>
+
+<div class="ui container dashboard-container">
+    
+    <!-- Header Section -->
+    <div class="ui center aligned basic segment">
+        <h1 class="ui icon header">
+            <i class="history icon"></i>
+            <div class="content">
+                Past Journeys
+                <div class="sub header">Review your mirror check performance history.</div>
+            </div>
+        </h1>
+    </div>
+
+    <!-- Journeys List -->
+    <div class="ui raised segment">
+        <div class="ui relaxed divided list">
+            {% for j in journeys %}
+            <div class="item journey-item" style="padding: 1rem;">
+                <i class="large car middle aligned icon"></i>
+            
+                <div class="content">
+                    <a href="/journey/{{ j.journey_id }}" class="header">
+                        Journey #{{ j.journey_id[:8] }}
+                    </a>
+                <div class="meta" style="margin-top: 5px;">
+                    <div class="description">
+                    <i class="calendar outline icon"></i>
+                    {{ j.start_time[8:10] }}/{{ j.start_time[5:7] }}/{{ j.start_time[2:4] }}
+                    &nbsp;&nbsp;
+                    <i class="clock outline icon"></i>
+                    {{ j.start_time[11:16] }}
+                </div>
+                </div>
+            </div>
+                <div class="right floated content">
+                    <a href="/journey/{{ j.journey_id }}" class="ui tiny compact blue button">View Details</a>
+                </div>
+            </div>
+            {% endfor %} 
+            {% if not journeys %}
+            <div class="ui placeholder segment">
+                <div class="ui icon header">
+                    <i class="search icon"></i>
+                    No journeys found.
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer Action -->
+    <div class="ui center aligned segment basic">
+        <p>Stay safe on the roads!</p>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!--
+Generative AI Disclosure:
+These html templates were generated using AI.
+The conversation can be viewed at:
+https://gemini.google.com/share/d386ccbd61f3
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Journey Details | {{ journey_id[:8] }}</title>
+    <!-- Fomantic UI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.9.3/dist/semantic.min.css">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .main-container { max-width: 800px; margin: auto; }
+        .score-header { margin-bottom: 2rem !important; }
+    </style>
+</head>
+<body>
+
+    <div class="ui container main-container">
+    
+        <div class="ui clearing segment">
+            <h3 class="ui right floated header">
+                <div class="content">
+                    Safety Score
+                    <div class="ui {{ 'success' if score > 70 else 'warning' }} progress" data-percent="{{ score }}">
+                        <div class="bar" style="width: {{ score }}%;">
+                            <div class="progress">{{ score }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </h3>
+            
+            <h2 class="ui left floated header">
+                <i class="car icon"></i>
+                <div class="content">
+                    Journey #{{ journey_id[:8] }}
+                    <div class="sub header">Mirror Check Summary</div>
+                </div>
+            </h2>
+        </div>
+
+    <div class="ui one cards">
+        {% for event in events %}
+        <div class="ui fluid card {{ 'green' if event.result|lower == 'pass' else 'red' }}">
+            <div class="content">
+                <div class="header">
+                    {{ event.event_name.replace('_', ' ') }}
+                    <div class="meta" style="display: inline-block; margin-left: 10px; font-weight: normal; font-size: 0.8em; color: gray;">
+                    <i class="clock icon"></i> {{ event.timestamp[11:16] }}
+                    </div>
+                    <div class="ui {{ 'green' if event.result|lower == 'pass' else 'red' }} right floated label">
+                        {{ event.result|upper }}
+                    </div>
+                </div>
+                
+                <div class="description">
+                    <div class="ui grid">
+                        <!-- Checked Column -->
+                        <div class="eight wide column">
+                            <h5 class="ui green header"><i class="check circle icon"></i> Checked</h5>
+                            <div class="ui labels">
+                                {% for mirror in event.checked %}
+                                <span class="ui small label">{{ mirror.replace('_', ' ') }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Missed Column -->
+                        <div class="eight wide column">
+                            <h5 class="ui red header"><i class="times circle icon"></i> Missed</h5>
+                            <div class="ui labels">
+                                {% for mirror in event.missed %}
+                                <span class="ui small basic red label">{{ mirror.replace('_', ' ') }}</span>
+                                {% endfor %}
+                                {% if not event.missed %}
+                                <span class="ui disabled text">None</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="ui basic center aligned segment">
+        <a href="/" class="ui animated button" tabindex="0">
+            <div class="visible content">Back to Home</div>
+            <div class="hidden content">
+                <i class="left arrow icon"></i>
+            </div>
+        </a>
+    </div>
+
+</div>
+</body>
+</html>
