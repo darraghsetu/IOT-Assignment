@@ -97,5 +97,81 @@ https://gemini.google.com/share/d386ccbd61f3
     </div>
 
 </div>
+<!-- 
+Generative AI Disclosure: The following script for real-time updates is also AI generated.
+The conversation can be viewed at: https://gemini.google.com/share/e5f0cb3c16e4
+-->
+<!-- Socket.IO Client Library -->
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+<script>
+    // Initialize socket connection
+    const socket = io();
+    const currentJourneyId = "{{ journey_id }}";
+
+    socket.on('new_event', function(data) {
+        if (String(data.journey_id).trim() !== String(currentJourneyId).trim()) {
+            console.log("Ignored: Event belongs to a different journey.");
+            return;
+        }
+
+        // 1. Update Score
+        const scoreElement = document.querySelector('.ui.progress');
+        if (scoreElement) {
+            const barElement = scoreElement.querySelector('.bar');
+            const textElement = scoreElement.querySelector('.progress');
+            barElement.style.width = data.score + '%';
+            textElement.innerText = data.score + '%';
+
+            scoreElement.classList.remove('success', 'warning');
+            scoreElement.classList.add(data.score > 70 ? 'success' : 'warning');
+        }
+
+        // 2. Add New Card
+        const cardsContainer = document.querySelector('.ui.one.cards');
+        if (cardsContainer) {
+            const event = data.event;
+            const color = String(event.result).toLowerCase() === 'pass' ? 'green' : 'red';
+
+            // We use standard JS to build the card to avoid map() errors if lists are empty
+            const checkedItems = (event.checked || []).map(m =>
+                `<span class="ui small label">${m.replace('_', ' ')}</span>`
+            ).join('');
+
+            const missedItems = (event.missed || []).length > 0
+                ? (event.missed || []).map(m => `<span class="ui small basic red label">${m.replace('_', ' ')}</span>`).join('')
+                : '<span class="ui disabled text">None</span>';
+
+            const cardHtml = `
+                <div class="ui fluid card ${color}">
+                    <div class="content">
+                        <div class="header">
+                            ${event.event_name.replace('_', ' ')}
+                            <div class="meta" style="display: inline-block; margin-left: 10px; font-weight: normal; font-size: 0.8em; color: gray;">
+                                <i class="clock icon"></i> ${event.timestamp.substring(11, 16)}
+                            </div>
+                            <div class="ui ${color} right floated label">${event.result.toUpperCase()}</div>
+                        </div>
+                        <div class="description">
+                            <div class="ui grid">
+                                <div class="eight wide column">
+                                    <h5 class="ui green header"><i class="check circle icon"></i> Checked</h5>
+                                    <div class="ui labels">${checkedItems}</div>
+                                </div>
+                                <div class="eight wide column">
+                                    <h5 class="ui red header"><i class="times circle icon"></i> Missed</h5>
+                                    <div class="ui labels">${missedItems}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            // Inject the card at the bottom of the list
+            cardsContainer.insertAdjacentHTML('beforeend', cardHtml);
+            cardsContainer.lastElementChild.scrollIntoView({ behavior: 'smooth'});
+        }
+    });
+</script>
 </body>
 </html>
