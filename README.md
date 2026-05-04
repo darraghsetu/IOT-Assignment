@@ -14,6 +14,8 @@ My idea of how this would be set up would a Raspberry Pi with an attached Pi Cam
 
 I would also use **simulated** sensor(s) to monitor the motion of a car using an accelerometer, gyroscope and possibly a GPS module. When an event occurs where the driver should have checked their mirrors is sensed, the head positioning in the last *x* seconds is checked for the correct orientation. In either of the cases a timestamped message is sent using MQTT with the event details. After a journey is finished a dashboard would be available where the driver could check the route taken (from GPS data dumped at the end of a journey) and details about when they failed to check their mirrors.
 
+<img width="1408" height="643" alt="Gemini_Generated_Image_iy10hsiy10hsiy10" src="https://github.com/user-attachments/assets/c1e17cc8-839c-4d14-8292-067ec177e8d2" />
+
 ## Setup
 
 Python 3.11 is required for this project (although 3.12 *may* work also). I recommend using a Raspberry Pi with a fresh install of **Raspberry Pi OS (Legacy, 64-bit) Lite** for the OS, as this comes with Python 3.11.
